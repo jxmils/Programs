@@ -1,7 +1,7 @@
 package edu.nmsu.cs.webserver;
 
 /**
- * A simple web server: it creates a new WebWorker for each new client connection, so all the
+ * A simple web server: it chdgfhreates a new WebWorker for each new client connection, so all the
  * WebServer object does is listen on the port for incoming client connection requests.
  *
  * This class contains the application "main()" (see below). At startup, main() creates an object of
@@ -10,9 +10,9 @@ package edu.nmsu.cs.webserver;
  * requests. When one happens, it creates a new object of the WebWorker class and hands that client
  * connection off to the WebWorker object. The WebServer object then just keeps listening for new
  * client connections. See the WebWorker source for more information about it.
- * 
+ *
  * @author Jon Cook, Ph.D.
- * 
+ *
  **/
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,7 +21,7 @@ public class WebServer
 {
 	private ServerSocket	socket;
 
-	private boolean				running;
+	private boolean			running;
 
 	/**
 	 * Constructor
@@ -34,7 +34,7 @@ public class WebServer
 	/**
 	 * Web server starting point. This method does not return until the server is finished, so perhaps
 	 * it should be named "runServer" or something like that.
-	 * 
+	 *
 	 * @param port
 	 *          is the TCP port number to accept connections on
 	 **/
@@ -82,26 +82,25 @@ public class WebServer
 	 * Application main: process command line and start web server; default port number is 8080 if not
 	 * given on command line.
 	 **/
-	public static void main(String args[])
-	{
+	public static void main(String args[]){
 		int port = 8080;
-		if (args.length > 1)
-		{
+		if (args.length > 1){
 			System.err.println("Usage: java Webserver <portNumber>");
 			return;
 		}
-		else if (args.length == 1)
-		{
-			try
-			{
+		else if(args.length == 1){
+
+			try{
 				port = Integer.parseInt(args[0]);
 			}
-			catch (Exception e)
-			{
+
+			catch (Exception e){
 				System.err.println("Argument must be an int (" + e + ")");
 				return;
 			}
+
 		}
+
 		WebServer server = new WebServer();
 		if (!server.start(port))
 		{
