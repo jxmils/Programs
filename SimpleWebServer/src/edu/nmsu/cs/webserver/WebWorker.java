@@ -23,7 +23,10 @@ package edu.nmsu.cs.webserver;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.text.DateFormat;
@@ -33,6 +36,13 @@ import java.io.IOException;
 import java.io.File;
 import java.util.Scanner;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.io.*;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
+
 
 public class WebWorker implements Runnable {
 
@@ -63,8 +73,11 @@ public class WebWorker implements Runnable {
 
 			//process streams
 			File request = readHTTPRequest(is);
-			writeHTTPHeader(os, "text/html", request);
-			writeContent(os, request);
+
+			//now we have to check the content type
+			String typeOfContent = checktypeOfContent(request);
+			writeHTTPHeader(os, typeOfContent, request);
+			writeContent(os, request, typeOfContent);
 			os.flush();
 			socket.close();
 		}
@@ -75,6 +88,7 @@ public class WebWorker implements Runnable {
 
 		System.err.println("Done handling connection.");
 		return;
+
 	}
 
 	/**
@@ -115,7 +129,7 @@ public class WebWorker implements Runnable {
 			requestedFile = new File((requestedSplit[1].substring(1)));
 
 			//check if file exists
-			if(requestedFile.exists() && requestedSplit[1].substring(1).endsWith(".html")){
+			if(!requestedFile.isDirectory() && requestedFile.exists()){
 				return requestedFile;
 			}
 			else if(requestedSplit[1].endsWith("/")){
@@ -127,6 +141,7 @@ public class WebWorker implements Runnable {
 		return null;
 
 	}
+
 	/**
 	 * Write the HTTP header lines to the client network connection.
 	 *
@@ -148,8 +163,6 @@ public class WebWorker implements Runnable {
 		os.write((df.format(d)).getBytes());
 		os.write("\n".getBytes());
 		os.write("Server: Jason's very own server\n".getBytes());
-		// os.write("Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT\n".getBytes());
-		// os.write("Content-Length: 438\n".getBytes());
 		os.write("Connection: close\n".getBytes());
 		os.write("Content-Type: ".getBytes());
 		os.write(contentType.getBytes());
@@ -158,15 +171,41 @@ public class WebWorker implements Runnable {
 	}
 
 	/**
+	 * checks the content of incoming file and returns correct ending
+	 *
+	 * @param request
+	 *          requested file
+	 * @return
+	 *          String of typeOfContent
+	 **/
+	 private String checktypeOfContent(File request){
+
+		 if(request == null){
+			 return "text/html";
+		 }
+
+		 HashMap<String, String> extensions = new HashMap<String, String>();
+		 extensions.put("jpeg", "image/jpeg");
+		 extensions.put("jpg", "image/jpeg");
+		 extensions.put("png", "image/png");
+		 extensions.put("gif", "image/gif");
+
+		 String name = request.getName();
+		 name = name.substring((name.lastIndexOf(".") + 1));
+
+		 return extensions.getOrDefault(name, "text/html");
+
+	 }
+
+	/**
 	 * Write the data content to the client network connection. This MUST be done after the HTTP
 	 * header has been written out.
 	 *
 	 * @param os
 	 *          is the OutputStream object to write to
 	 **/
-	private void writeContent(OutputStream os, File requested) throws Exception
-	{
-		if(requested == null){
+	private void writeContent(OutputStream os, File requested, String typeOfContent) throws Exception {
+		if(requested == null || !requested.exists()){
 			os.write("<h3>404 Not Found</h3>\n".getBytes());
 		}
 		else if(landingPage){
@@ -174,28 +213,26 @@ public class WebWorker implements Runnable {
 			os.write("<h3>My web server works!</h3>\n".getBytes());
 			os.write("</body></html>\n".getBytes());
 		}
-
-		Scanner scan = new Scanner(requested);
-
-		while (scan.hasNextLine()) {
-
-			String line = scan.nextLine();
-
-			if (line.contains("<cs371date>")) {
-				LocalDate date = LocalDate.now();
-				line = line.replaceAll("<cs371date>", date.toString());
+		else if(typeOfContent.equals("text/html")){
+			os.write("<html><body>\n".getBytes());
+			Scanner scan = new Scanner(requested);
+			while(scan.hasNextLine()){
+				String in = scan.nextLine();
+				if(in.contains("<cs371date>")){
+					LocalDate date = LocalDate.now();
+					in = in.replaceAll("<cs371date>", date.toString());
+				}
+				if (in.contains("<cs371server>")) {
+					in = in.replaceAll("<cs371server>", "Jason's Server");
+				}
+				os.write(in.getBytes());
 			}
-
-			if (line.contains("<cs371server>")) {
-				line = line.replaceAll("<cs371server>", "Jason's Server");
-			}
-
-			os.write(line.getBytes());
-
+			scan.close();
+			os.write("</body></html>\n".getBytes());
 		}
-
-		scan.close();
-		os.write("</body></html>\n".getBytes());
+		//we know we have some type of image if we get to this piont
+		byte[] imageBytes = Files.readAllBytes(requested.toPath());
+		os.write(imageBytes);
 
 	}
 
