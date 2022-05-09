@@ -34,7 +34,62 @@ public class Circle1Test
 	{
 		System.out.println("\nTest finished.");
 	}
+	//
+	// Test an intersection of two circles
+	//
+	@Test
+	public void intersectionOfTwoCircles(){
+		System.out.println("Test Starting...");
+		System.out.println("This is two circles intersecting");
+		Circle1 circle2 = new Circle1(0, 2, 3);
+		Assert.assertTrue(circle1.intersects(circle2) == true);
+	}
 
+	//
+	// Test an that two circles meet but not intersect
+	//
+	@Test
+	public void meetingOfTwoCircles(){
+		System.out.println("Test Starting...");
+		System.out.println("This is two circles meeting, but not intersecting");
+		Circle1 circle2 = new Circle1(-5, 2, 3);
+		Assert.assertTrue(circle1.intersects(circle2) == true);
+	}
+
+	//
+	// Test that two circles do not meet at all
+	//
+	@Test
+	public void meetingOfTwoCircles(){
+		System.out.println("Test Starting...");
+		System.out.println("This is two circles meeting, but not intersecting");
+		Circle1 circle2 = new Circle1(-7, 2, 3);
+		Assert.assertTrue(circle1.intersects(circle2) == true);
+	}
+
+	//
+	// Test scaling a circle by a factor of 3
+	//
+	@Test
+	public void scaleCircle(){
+		System.out.println("Test Starting...");
+		System.out.println("Scaling of a circle by a factor of 3");
+		double oldSize = circle1.radius;
+		double newSize = circle1.scale(2);
+		Assert.assertTrue(oldSize * 2 == newSize);
+	}
+
+	//
+	// Test shrinking a circle by a factor of 0.5
+	//
+	@Test
+	public void scaleCircle(){
+		System.out.println("Test Starting...");
+		System.out.println("Shrikning of a circle by a factor of 0.5");
+		double oldSize = circle1.radius;
+		double newSize = circle1.scale(0.5);
+		Assert.assertTrue(oldSize * 0.5 == newSize);
+	}
 	//
 	// Test a simple positive move
 	//
