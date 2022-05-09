@@ -54,9 +54,9 @@ public class RacingScore2
 			s2 = score2;
 		}
 		else
-		{
-			s1 = 99;
-			s2 = 99;
+		{ //changed s1 = 99, s2 = 99 to s1 = score2 and s2 = score3
+			s1 = score2;
+			s2 = score3;
 		}
 		s = s1 + s2;
 		return s;
