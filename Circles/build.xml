@@ -1,0 +1,61 @@
+<project name="Circles" basedir=".">
+
+	<property name = "src" location = "src"/>
+	<property name = "bin" location = "bin"/>
+	<property name = "lib" location = "lib"/>
+
+	<target name = "clean" description = "Cleans class files">
+		<delete>
+			<fileset dir = "." includes = "**/*.class"/>
+		</delete>
+	</target>
+
+	<target name = "compile" description = "Compiles project">
+		<mkdir dir = "${bin}"/>
+		<javac srcdir = "${src}" destdir = "${bin}">
+			<classpath>
+				<fileset dir = "${lib}">
+					<include name = "**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+
+	<target name = "run" depends = "compile" description = "Run circles with default arguments">
+		<java classname = "edu.nmsu.cs.circles.CircleRun" classpath = "${bin}" fork = "true">
+			<arg value = "0"/>
+			<arg value = "0"/>
+			<arg value = "5"/>
+			<arg value = "5"/>
+			<arg value = "5"/>
+			<arg value = "10"/>
+		</java>
+	</target>
+
+    <target name="testCircle1" depends = "compile" description = "Runs JUnit on Circle1Test">
+	    <java classname = "org.junit.runner.JUnitCore" classpath = "${bin}" fork = "true">
+			<classpath>
+				<fileset dir = "${lib}">
+					<include name = "**/*.jar"/>
+				</fileset>
+				<pathelement path = "${bin}"/>
+			</classpath>
+            <arg value = "edu.nmsu.cs.circles.Circle1Test"/>
+        </java>
+    </target>
+
+	<target name = "testCircle2" depends = "compile" description = "Runs JUnit on Circle2Test">
+	    <java classname = "org.junit.runner.JUnitCore" classpath = "${bin}">
+			<classpath>
+				<fileset dir = "${lib}">
+					<include name = "**/*.jar"/>
+				</fileset>
+				<pathelement path = "${bin}"/>
+			</classpath>
+            <arg value = "edu.nmsu.cs.circles.Circle2Test"/>
+        </java>
+	</target>
+
+	<target name = "test" depends = "testCircle1, testCircle2" description = "Runs JUnit on both Circle1Test and Circle2Test"/>
+</project>
