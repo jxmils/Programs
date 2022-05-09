@@ -61,7 +61,7 @@ public class Circle2Test
 	// Test that two circles do not meet at all
 	//
 	@Test
-	public void meetingOfTwoCircles(){
+	public void noMeetingOfTwoCircles(){
 		System.out.println("Test Starting...");
 		System.out.println("This is two circles meeting, but not intersecting");
 		Circle2 circle1 = new Circle2(-7, 2, 3);
@@ -84,7 +84,7 @@ public class Circle2Test
 	// Test shrinking a circle by a factor of 0.5
 	//
 	@Test
-	public void scaleCircle(){
+	public void shrinkCircle(){
 		System.out.println("Test Starting...");
 		System.out.println("Shrikning of a circle by a factor of 0.5");
 		double oldSize = circle2.radius;
