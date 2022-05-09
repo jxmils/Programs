@@ -7,9 +7,9 @@ package edu.nmsu.cs.scoring;
  * from 0 to 50 (inclusive), but the lowest score is thrown out and the competitor's overall score
  * is just the sum of the two highest scores. This class supports the recording of the three judge's
  * scores, and the computing of the competitor's overall score.
- * 
+ *
  * @author Jon Cook, Ph.D.
- * 
+ *
  ***/
 
 public class RacingScore1

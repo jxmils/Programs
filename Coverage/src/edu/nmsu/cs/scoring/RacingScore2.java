@@ -7,7 +7,7 @@ package edu.nmsu.cs.scoring;
  * from 0 to 50 (inclusive), but the lowest score is thrown out and the competitor's overall score
  * is just the sum of the two highest scores. This class supports the recording of the three judge's
  * scores, and the computing of the competitor's overall score.
- * 
+ *
  * @author Jon Cook, Ph.D.
  ***/
 
@@ -47,7 +47,8 @@ public class RacingScore2
 			s1 = score1;
 			s2 = score2;
 		}
-		else if (score3 < score1 && score3 < score2)
+		//change score3 < score2 to score1 < score2 or check never runs
+		else if (score3 < score1 && score1 < score2)
 		{
 			s1 = score1;
 			s2 = score2;
@@ -64,7 +65,8 @@ public class RacingScore2
 	public static void main(String args[])
 	{
 		int s1, s2, s3;
-		if (args == null || args.length != 3)
+		//removed null check, can never be null
+		if (args.length != 3)
 		{
 			System.err.println("Error: must supply three arguments!");
 			return;

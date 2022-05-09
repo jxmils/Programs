@@ -1,5 +1,5 @@
 <!-- Sample Ant build file for running RacingScore under JaCoCo 
-     Jonathan Cook, 17 Sep 2015; modified Z O. Toups, July 2020 using code from: 
+     Jonathan Cook, 17 Sep 2015; modified Z O. Toups, July 2020 using code from:
      https://www.eclemma.org/jacoco/trunk/doc/examples/build/build.xml
      Some components
         Copyright (c) 2009, 2020 Mountainminds GmbH & Co. KG and Contributors
@@ -43,7 +43,7 @@
 	<target name="test" depends="compile,checkRun" unless="run.notneeded">
 		<echo>run needed...</echo>
 		<!--
-	 Step 2: Wrap test execution with the JaCoCo coverage task 
+	 Step 2: Wrap test execution with the JaCoCo coverage task
 	 this example has two runs, you'll need to perhaps
         modify them, and then add more; this only runs if needed
 	-->
@@ -72,7 +72,7 @@
 		<!--  Step 3: Create coverage report  -->
 		<jacoco:report>
 			<!--
-	 This task needs the collected execution data and ... 
+	 This task needs the collected execution data and ...
 	-->
 			<executiondata>
 				<file file="${result.exec.file}" />
@@ -108,4 +108,3 @@
 	</target>
 
 </project>
-
